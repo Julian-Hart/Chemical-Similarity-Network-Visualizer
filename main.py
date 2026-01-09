@@ -1,4 +1,6 @@
 import pubchempy as pcp
+from rdkit.Chem  import AllChem, MolFromSmiles
+
 
 def create_compound_dictionary(compoundList):
     compoundDict = {}
@@ -11,7 +13,18 @@ def create_compound_dictionary(compoundList):
     return compoundDict
 
 
+def create_fingerprints(compoundDict):
+    compoundFingerprintDict = {}
+    for compound in compoundDict.keys():
+        fpgen = AllChem.GetRDKitFPGenerator()
+        print(compoundDict[compound])
+        compoundFingerprintDict[compound] = fpgen.GetFingerprint(MolFromSmiles(compoundDict[compound]))
+
+    return compoundFingerprintDict
+    
+
 if __name__ == "__main__":
     compoundList = ["Aspirin", "Tylenol"]
-    print(create_compound_dictionary(compoundList))
+    compoundDict = create_compound_dictionary(compoundList)
+    print(create_fingerprints(compoundDict))
 
